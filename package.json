@@ -22,7 +22,8 @@
     "morgan": "^1.10.0",
     "nocache": "^3.0.3",
     "uniqid": "^5.4.0",
-    "update": "^0.4.2"
+    "update": "^0.4.2",
+    "plaid": "^12.3.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
