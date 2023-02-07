@@ -17,11 +17,12 @@
     "gravatar": "^1.8.2",
     "helmet": "^5.0.2",
     "hsts": "^2.2.0",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "mongoose": "^6.2.10",
     "morgan": "^1.10.0",
     "nocache": "^3.0.3",
-    "uniqid": "^5.4.0"
+    "uniqid": "^5.4.0",
+    "update": "^0.4.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
