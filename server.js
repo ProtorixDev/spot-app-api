@@ -45,7 +45,8 @@ app.get("/", (req, res) => res.send("Server Root"));
 app.get("/ping", (req, res) => res.send("pong"));
 
 
-//app.use("/api/v1/auth", require("./routes/api/auth"));
+app.use("/api/v1/auth", require("./routes/api/auth"));
+app.use("/api/v1/plaid", require("./routes/api/plaid"));
 
 
 

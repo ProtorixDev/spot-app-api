@@ -8,6 +8,11 @@ const staging = {
         jwtAccessSecret: process.env.JWT_ACCESS_SECRET,
         jwtRefreshSecret: process.env.JWT_REFRESH_SECRET
     },
+    plaid: {
+        client_id: process.env.PLAID_CLIENT_ID,
+        secret: process.env.PLAID_SECRET,
+        env: process.env.PLAID_ENV,
+    }
 };
 
 const production = {
@@ -19,6 +24,11 @@ const production = {
         jwtAccessSecret: process.env.JWT_ACCESS_SECRET,
         jwtRefreshSecret: process.env.JWT_REFRESH_SECRET
     },
+    plaid: {
+        client_id: process.env.PLAID_CLIENT_ID,
+        secret: process.env.PLAID_SECRET,
+        env: process.env.PLAID_ENV,
+    }
 };
 
 
