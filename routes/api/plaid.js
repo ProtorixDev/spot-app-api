@@ -27,6 +27,8 @@ const configuration = new Configuration({
     },
 });
 
+const client = new PlaidApi(configuration);
+
 
 //const misc = require("../api/misc");
 
@@ -41,6 +43,9 @@ const configuration = new Configuration({
 router.post(
     "/link/token/create",
     [
+        check("client_id", "Invalid Client ID").not().isEmpty(),
+        check("client_secret", "Invalid Client Secret").not().isEmpty(),
+        check("firebase_id", "Firebase UID is required").not().isEmpty(),
 
     ],
     async (req, res) => {
@@ -49,7 +54,9 @@ router.post(
             return res.status(400).json({ errors: errors.array() });
         }
         var {
-
+            client_id,
+            client_secret,
+            firebase_id,
         } = req.body;
 
         //check client id and secret
@@ -67,8 +74,30 @@ router.post(
         try {
 
 
+            const currentUser = await User.findOne({
+                firebase_id: firebase_id,
+            });
+
+            if (!currentUser) {
+                return res.status(400).send({ error: "Invalid Firebase ID" });
+            }
 
 
+            const request = {
+                user: {
+                    // This should correspond to a unique id for the current user.
+                    client_user_id: firebase_id,
+                },
+                client_name: 'Plaid Test App',
+                products: ['auth'],
+                language: 'en',
+                webhook: 'https://webhook.example.com',
+                redirect_uri: 'http://localhost:3000/api/plaid/redirect',
+                country_codes: ['US'],
+            };
+
+            const createTokenResponse = await client.linkTokenCreate(request);
+            return res.json(createTokenResponse.data);
 
         } catch (err) {
             console.error(err.message);
