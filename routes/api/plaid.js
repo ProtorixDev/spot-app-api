@@ -107,4 +107,82 @@ router.post(
 );
 
 
+
+
+// @Route   POST /api/v1/plaid/exchange/token
+// @Desc    sync mongo and firebase
+// @Access  Requires Client ID and secret for authentication
+router.post(
+    "/exchange/token",
+    [
+        check("client_id", "Invalid Client ID").not().isEmpty(),
+        check("client_secret", "Invalid Client Secret").not().isEmpty(),
+        check("firebase_id", "Firebase UID is required").not().isEmpty(),
+        check("public_token", "Public Token is required").not().isEmpty(),
+
+    ],
+    async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        var {
+            client_id,
+            client_secret,
+            firebase_id,
+            public_token,
+        } = req.body;
+
+        //check client id and secret
+        if (client_id !== process.env.ONBOARD_CLIENT_ID) {
+            //save failed attempt
+            return res.status(400).send({ error: "Invalid Client ID or Secret" });
+        }
+
+        if (client_secret !== process.env.ONBOARD_CLIENT_SECRET) {
+            //save failed attempt
+            return res.status(400).send({ error: "Invalid Client ID or Secret" });
+        }
+
+
+        try {
+
+
+            const currentUser = await User.findOne({
+                firebase_id: firebase_id,
+            });
+
+            if (!currentUser) {
+                return res.status(400).send({ error: "Invalid Firebase ID" });
+            }
+
+
+            const response = await client.itemPublicTokenExchange({
+                public_token: public_token,
+            });
+            // These values should be saved to a persistent database and
+            // associated with the currently signed-in user
+            const accessToken = response.data.access_token;
+            const itemID = response.data.item_id;
+
+            //save access token and item id to user
+
+            const updateUser = await User.findOneAndUpdate(
+                { firebase_id: firebase_id },
+                {
+                    plaid_access_token: accessToken,
+                    plaid_item_id: itemID,
+                });
+
+
+
+            res.json({ message: 'success' });
+        } catch (err) {
+            console.error(err.message);
+            res.status(500).send({ error: `something went wrong : ${err.message}` });
+        }
+    }
+);
+
+
 module.exports = router;

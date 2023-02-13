@@ -15,6 +15,16 @@ const UserSchema = new mongoose.Schema({
         unique: true,
         required: true
     },
+    plaid_access_token: {
+        type: String,
+        required: false,
+        default: ""
+    },
+    plaid_item_id: {
+        type: String,
+        required: false,
+        default: ""
+    },
 
 
 });
