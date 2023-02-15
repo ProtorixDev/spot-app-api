@@ -59,7 +59,6 @@ router.post(
             firebase_id,
         } = req.body;
 
-        console.log(req.body);
         //check client id and secret
         if (client_id !== process.env.ONBOARD_CLIENT_ID) {
             //save failed attempt

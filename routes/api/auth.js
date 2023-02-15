@@ -38,7 +38,6 @@ router.post(
             return res.status(400).json({ errors: errors.array() });
         }
         var { firebase_id, client_id, client_secret, display_name, email } = req.body;
-        console.log(req.body);
 
         //check client id and secret
         if (client_id !== process.env.ONBOARD_CLIENT_ID) {
