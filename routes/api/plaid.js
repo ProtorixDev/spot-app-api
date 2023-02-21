@@ -92,7 +92,7 @@ router.post(
                 products: ['auth'],
                 language: 'en',
                 webhook: 'https://eoa7fao8gayccee.m.pipedream.net',
-                redirect_uri: 'http://localhost:3000/api/plaid/redirect',
+                redirect_uri: 'spot://spot.com',
                 country_codes: ['US'],
             };
 
