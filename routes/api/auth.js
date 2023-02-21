@@ -39,14 +39,19 @@ router.post(
         }
         var { firebase_id, client_id, client_secret, display_name, email } = req.body;
 
+        console.log(req.body);
+
         //check client id and secret
         if (client_id !== process.env.ONBOARD_CLIENT_ID) {
             //save failed attempt
+            console.log("Invalid Client ID or Secret");
             return res.status(400).send({ error: "Invalid Client ID or Secret" });
+
         }
 
         if (client_secret !== process.env.ONBOARD_CLIENT_SECRET) {
             //save failed attempt
+            console.log("Invalid Client ID or Secret");
             return res.status(400).send({ error: "Invalid Client ID or Secret" });
         }
 
