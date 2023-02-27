@@ -88,7 +88,7 @@ router.post(
 
             const update_user = await User.findOneAndUpdate(
                 { firebase_id: firebase_id },
-                { user_token: create_user.data.user_id, });
+                { user_token: create_user.data.user_token, });
 
 
             const request = {
