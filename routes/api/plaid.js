@@ -97,7 +97,7 @@ router.post(
                     client_user_id: firebase_id,
                 },
                 client_name: 'Plaid Test App',
-                products: ['auth', 'income_verification'],
+                products: ['income_verification'],
                 language: 'en',
                 webhook: 'https://webhook.example.com',
                 redirect_uri: 'http://localhost:3000/api/plaid/redirect',
