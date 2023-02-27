@@ -97,7 +97,7 @@ router.post(
                     client_user_id: firebase_id,
                 },
                 client_name: 'Plaid Test App',
-                products: ['auth'],
+                products: ['auth', 'income_verification'],
                 language: 'en',
                 webhook: 'https://webhook.example.com',
                 redirect_uri: 'http://localhost:3000/api/plaid/redirect',
@@ -108,7 +108,7 @@ router.post(
             return res.json(createTokenResponse.data);
 
         } catch (err) {
-            console.error(err.message);
+            console.error(err);
             res.status(500).send({ error: `something went wrong : ${err.message}` });
         }
     }
@@ -247,19 +247,22 @@ router.post(
             }
 
             const request = {
-                user_token: 'user-sandbox-b0e2c4ee-a763-4df5-bfe9-46a46bce993d',
+                user_token: 'user-sandbox-ab58471d-f817-43ee-a617-2187eb996159',
                 options: {
                     count: 1,
                 },
             };
 
+            const inc = await client.creditBankIncomeGet(request);
 
 
 
 
-            res.json({ message: 'success' });
+
+
+            res.json({ message: 'success', income: inc.data });
         } catch (err) {
-            console.error(err.message);
+            console.error(err);
             res.status(500).send({ error: `something went wrong : ${err.message}` });
         }
     }
