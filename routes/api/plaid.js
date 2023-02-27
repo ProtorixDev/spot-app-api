@@ -98,10 +98,15 @@ router.post(
                 },
                 client_name: 'Plaid Test App',
                 products: ['income_verification'],
+                income_source_types: ['bank'],
                 language: 'en',
                 webhook: 'https://webhook.example.com',
                 redirect_uri: 'http://localhost:3000/api/plaid/redirect',
                 country_codes: ['US'],
+                bank_income: {
+                    days_requested: 30,
+                    enable_multiple_items: true
+                }
             };
 
             const createTokenResponse = await client.linkTokenCreate(request);
