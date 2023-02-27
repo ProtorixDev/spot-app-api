@@ -25,6 +25,20 @@ const UserSchema = new mongoose.Schema({
         required: false,
         default: ""
     },
+    income: {
+        type: Number,
+        required: false,
+        default: 0
+    },
+    isApproved: {
+        type: Boolean,
+        required: false,
+    },
+    user_token: {
+        type: String,
+        required: false,
+        default: ""
+    },
 
 
 });

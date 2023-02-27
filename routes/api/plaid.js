@@ -82,6 +82,14 @@ router.post(
                 return res.status(400).send({ error: "Invalid Firebase ID" });
             }
 
+            const create_user = await client.userCreate({
+                client_user_id: firebase_id,
+            });
+
+            const update_user = await User.findOneAndUpdate(
+                { firebase_id: firebase_id },
+                { user_token: create_user.data.user_id, });
+
 
             const request = {
                 user: {
@@ -173,6 +181,79 @@ router.post(
                     plaid_access_token: accessToken,
                     plaid_item_id: itemID,
                 });
+
+
+
+            res.json({ message: 'success' });
+        } catch (err) {
+            console.error(err.message);
+            res.status(500).send({ error: `something went wrong : ${err.message}` });
+        }
+    }
+);
+
+
+
+
+
+// @Route   POST /api/v1/plaid/check/income
+// @Desc    sync mongo and firebase
+// @Access  Requires Client ID and secret for authentication
+router.post(
+    "/check/income",
+    [
+        check("client_id", "Invalid Client ID").not().isEmpty(),
+        check("client_secret", "Invalid Client Secret").not().isEmpty(),
+        check("firebase_id", "Firebase UID is required").not().isEmpty(),
+
+    ],
+    async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        var {
+            client_id,
+            client_secret,
+            firebase_id,
+            public_token,
+        } = req.body;
+
+        //check client id and secret
+        if (client_id !== process.env.ONBOARD_CLIENT_ID) {
+            //save failed attempt
+            return res.status(400).send({ error: "Invalid Client ID or Secret" });
+        }
+
+        if (client_secret !== process.env.ONBOARD_CLIENT_SECRET) {
+            //save failed attempt
+            return res.status(400).send({ error: "Invalid Client ID or Secret" });
+        }
+
+
+        try {
+
+
+            const currentUser = await User.findOne({
+                firebase_id: firebase_id,
+            });
+
+            if (!currentUser) {
+                return res.status(400).send({ error: "Invalid Firebase ID" });
+            }
+
+            if (currentUser.plaid_access_token == "") {
+                return res.status(400).send({ error: "Invalid Plaid Access Token, account not connected" });
+            }
+
+            const request = {
+                user_token: 'user-sandbox-b0e2c4ee-a763-4df5-bfe9-46a46bce993d',
+                options: {
+                    count: 1,
+                },
+            };
+
+
 
 
 
