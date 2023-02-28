@@ -73,7 +73,7 @@ router.post(
 
         try {
 
-
+            var current_user_token = "";
             const currentUser = await User.findOne({
                 firebase_id: firebase_id,
             });
@@ -82,13 +82,23 @@ router.post(
                 return res.status(400).send({ error: "Invalid Firebase ID" });
             }
 
-            const create_user = await client.userCreate({
-                client_user_id: firebase_id,
-            });
+            if (currentUser.user_token == "") {
+                const create_user = await client.userCreate({
+                    client_user_id: firebase_id,
+                });
 
-            const update_user = await User.findOneAndUpdate(
-                { firebase_id: firebase_id },
-                { user_token: create_user.data.user_token, });
+                const update_user = await User.findOneAndUpdate(
+                    { firebase_id: firebase_id },
+                    { user_token: create_user.data.user_token, });
+
+                current_user_token = create_user.data.user_token;
+
+            } else {
+                current_user_token = currentUser.user_token;
+            }
+
+
+
 
 
             const request = {
@@ -98,22 +108,27 @@ router.post(
                 },
                 client_name: 'Plaid Test App',
                 products: ['income_verification'],
-                income_source_types: ['bank'],
                 language: 'en',
                 webhook: 'https://webhook.example.com',
                 redirect_uri: 'http://localhost:3000/api/plaid/redirect',
                 country_codes: ['US'],
-                bank_income: {
-                    days_requested: 30,
-                    enable_multiple_items: true
-                }
+                income_verification: {
+                    income_source_types: ['bank'],
+                    bank_income: {
+                        days_requested: 30,
+                        enable_multiple_items: true
+                    }
+                },
+                user_token: current_user_token,
+
             };
+
 
             const createTokenResponse = await client.linkTokenCreate(request);
             return res.json(createTokenResponse.data);
 
         } catch (err) {
-            console.error(err);
+            console.error(err.message);
             res.status(500).send({ error: `something went wrong : ${err.message}` });
         }
     }
