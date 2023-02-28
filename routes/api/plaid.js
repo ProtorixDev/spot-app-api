@@ -115,8 +115,8 @@ router.post(
                 income_verification: {
                     income_source_types: ['bank'],
                     bank_income: {
-                        days_requested: 30,
-                        enable_multiple_items: true
+                        days_requested: 15
+
                     }
                 },
                 user_token: current_user_token,
@@ -267,7 +267,7 @@ router.post(
             }
 
             const request = {
-                user_token: 'user-sandbox-ab58471d-f817-43ee-a617-2187eb996159',
+                user_token: 'user-sandbox-989f89b3-a414-4796-8ae9-45f0319b18ff',
                 options: {
                     count: 1,
                 },
