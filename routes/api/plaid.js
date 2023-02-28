@@ -267,7 +267,7 @@ router.post(
             }
 
             const request = {
-                user_token: 'user-sandbox-989f89b3-a414-4796-8ae9-45f0319b18ff',
+                user_token: 'user-sandbox-8b9d969d-18b9-46d0-9abe-511e364a4d9d',
                 options: {
                     count: 1,
                 },
@@ -275,12 +275,15 @@ router.post(
 
             const inc = await client.creditBankIncomeGet(request);
 
+            const currentIncome = inc.data.bank_income[0].bank_income_summary.total_amount;
+
+            if (currentIncome < 500) {
+                return res.status(403).send({ error: "Income is less than $500" });
+            }
 
 
 
-
-
-            res.json({ message: 'success', income: inc.data });
+            res.json({ message: 'success', income: currentIncome });
         } catch (err) {
             console.error(err);
             res.status(500).send({ error: `something went wrong : ${err.message}` });
