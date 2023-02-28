@@ -267,7 +267,7 @@ router.post(
             }
 
             const request = {
-                user_token: 'user-sandbox-8b9d969d-18b9-46d0-9abe-511e364a4d9d',
+                user_token: currentUser.user_token,
                 options: {
                     count: 1,
                 },
